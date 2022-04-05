@@ -33,7 +33,7 @@ class _SignupPageState extends State<SignupPage> {
                 Container(
                   margin: EdgeInsets.only(top: 20, bottom: 20),
                   child: Text(
-                      'Login',
+                      'Sign Up',
                     style: TextStyle(
                       fontSize: 35,
                       fontWeight: FontWeight.bold

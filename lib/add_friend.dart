@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'list_view_firebase_demo_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddFriendPage extends StatefulWidget {
   const AddFriendPage({Key? key}) : super(key: key);
@@ -50,12 +52,15 @@ class _AddFriendPageState extends State<AddFriendPage> {
                 'Add Friend'
               ),
               onPressed: () {
+                setState(() {
+
+                });
                 print(nameController.text);
                 print(phoneController.text);
                 print(typeController.text);
 
                 var timestamp = new DateTime.now().millisecondsSinceEpoch;
-                FirebaseDatabase.instance.reference().child("Friends/Friend" + timestamp.toString()).set(
+                FirebaseFirestore.instance.collection("Friends" + timestamp.toString()).add(
                   {
                     'Name' : nameController.text,
                     "Phone Number" : phoneController.text,

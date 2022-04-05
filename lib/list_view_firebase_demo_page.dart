@@ -4,6 +4,7 @@ import 'add_friend.dart';
 import 'friend_data.dart';
 import 'friends_contact_details.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListViewFirebaseDemoPage extends StatefulWidget {
   const ListViewFirebaseDemoPage({Key? key}) : super(key: key);
@@ -17,56 +18,61 @@ class _ListViewFirebaseDemoPageState extends State<ListViewFirebaseDemoPage> {
 
   var friendList = [];
 
-    _ListViewFirebaseDemoPageState() {
-      //load all friends from Firebase Database and display them
-      // DatabaseReference ref = FirebaseDatabase.instance.ref("Friends");
-      // Stream<DatabaseEvent> stream = ref.onValue;
-      // stream.listen((DatabaseEvent event) {
-      //   print('Event Type: ${event.type}');
-      //   print('Snapshot: ${event.snapshot}');
-      //   var friendTmpList = [];
-      //     final data = event.snapshot.value;
-      //   friendList = ;
+    void loadall() {
+      FirebaseFirestore.instance.collection("Friends").get()
+          .then((querySnapshot) {
+        print("Successfully load all the students");
+        // print(querySnapshot);
+        querySnapshot.docs.forEach((element) {
+          print(element.data()['Name']);
+          print(element.data()['Phone Number']);
+          print(element.data()['TYPE']);
+          friendList.add(element.data()['Name'] + element.data()['Phone Number'] + element.data()['TYPE']);
+        });
+        setState(() {
 
-
-
-
-
-      FirebaseDatabase.instance.ref().child('Friends').once()
-          .then((datasnapshot) {
-
-            print("Successfully loaded data");
-            print(datasnapshot);
-            print("Key: ");
-            print(datasnapshot.key);
-            print("Value: ");
-            print(datasnapshot.value);
-            print("Iterating the value map: ");
-            var friendTmpList = [];
-            datasnapshot.value.forEach((k, v) {
-              print(k);
-              print(v);
-              friendTmpList.add(v);
-            });
-            print("Final Friend List: ");
-            print(friendTmpList);
-            friendList = friendTmpList;
-            setState(() {
-
-            });
-
-          })
-          .catchError((error) {
-          print("Failed to load data");
-          print(error);
-          });
+        });
+      }).catchError((error) {
+        print("Failed to load all the students.");
+        print(error);
+      });
     }
 
-
+    //   FirebaseDatabase.instance.ref().child('Friends').once()
+    //       .then((datasnapshot) {
+    //
+    //         print("Successfully loaded data");
+    //         print(datasnapshot);
+    //         print("Key: ");
+    //         print(datasnapshot.snapshot.key);
+    //         print("Value: ");
+    //         print(datasnapshot.snapshot.value);
+    //         print("Iterating the value map: ");
+    //         var friendTmpList = [];
+    //         datasnapshot.snapshot.value!;
+    //         .forEach((k, v) {
+    //           print(k);
+    //           print(v);
+    //           friendTmpList.add(v);
+    //         });
+    //         print("Final Friend List: ");
+    //         print(friendTmpList);
+    //         friendList = friendTmpList;
+    //         setState(() {
+    //
+    //         });
+    //
+    //       })
+    //       .catchError((error) {
+    //       print("Failed to load data");
+    //       print(error);
+    //       });
+    // }
 
 
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
@@ -96,34 +102,36 @@ class _ListViewFirebaseDemoPageState extends State<ListViewFirebaseDemoPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                            '${friendList[index]['name']}',
+                            '${friendList[index]['Name']}',
                                 style: TextStyle(
                                 fontWeight: FontWeight.bold
             )
                         ),
                         Text(
-                          '${friendList[index]['phone']}',
+                          '${friendList[index]['Phone Number']}',
                         ),
                       ]
                     ),
                     Spacer(),
                     Text(
-                        '${friendList[index]['type']}'
-                    )
+                        '${friendList[index]['TYPE']}'
+                    ),
                   ],
               ),
             ),
           );
         }
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          loadall();
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddFriendPage()),
           );
         },
-      )
+      ),
     );
   }
 }
