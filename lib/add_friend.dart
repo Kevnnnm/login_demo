@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'list_view_firebase_demo_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'list_view_firebase_demo_page.dart';
+import 'list_view_firebase_demo_page.dart';
 
 class AddFriendPage extends StatefulWidget {
   const AddFriendPage({Key? key}) : super(key: key);
@@ -49,6 +50,15 @@ class _AddFriendPageState extends State<AddFriendPage> {
                 )
             ),
             ElevatedButton(
+              child: Text("Go back"),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListViewFirebaseDemoPage()),
+                );}
+
+            ),
+            ElevatedButton(
               child: Text(
                 'Add Friend'
               ),
@@ -70,6 +80,9 @@ class _AddFriendPageState extends State<AddFriendPage> {
                   print('Successfully added friend');
                 }).catchError((error) {
                   print('Failed to add.' + error.toString());
+                  setState(() {
+
+                  });
                 });
               },
             )
