@@ -1,6 +1,8 @@
 # login_demo
 
-A new Flutter project.
+Uses Android Studio and flutter to build a login profile app.
+Includes a sign up page using firebase authentication to save users and login.
+Uses firebase firestore to store data and contacts of different people (names, phone numbers, etc...).
 
 ## Getting Started
 
