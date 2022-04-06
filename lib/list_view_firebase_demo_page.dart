@@ -18,22 +18,29 @@ class _ListViewFirebaseDemoPageState extends State<ListViewFirebaseDemoPage> {
 
   var friendList = [];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadall();
+  }
+
     void loadall() {
       FirebaseFirestore.instance.collection("Friends").get()
           .then((querySnapshot) {
-        print("Successfully load all the students");
+        print("Successfully loaded friends");
         // print(querySnapshot);
         querySnapshot.docs.forEach((element) {
           print(element.data()['Name']);
           print(element.data()['Phone Number']);
           print(element.data()['TYPE']);
-          friendList.add(element.data()['Name'] + element.data()['Phone Number'] + element.data()['TYPE']);
+          friendList.add(element.data());
         });
         setState(() {
 
         });
       }).catchError((error) {
-        print("Failed to load all the students.");
+        print("Failed to load all the contacts.");
         print(error);
       });
     }
@@ -87,14 +94,14 @@ class _ListViewFirebaseDemoPageState extends State<ListViewFirebaseDemoPage> {
             },
             title: Container(
               height: 50,
-              //color: Colors.amber,
+              color: Colors.amber,
               margin: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
               child: Row(
                   children: [
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage('${friendList[index]['imageURL']}'),
+                        backgroundImage: NetworkImage('${friendList[index]['ImageURL']}'),
                       ),
                     ),
                     Column(
@@ -114,7 +121,7 @@ class _ListViewFirebaseDemoPageState extends State<ListViewFirebaseDemoPage> {
                     ),
                     Spacer(),
                     Text(
-                        '${friendList[index]['TYPE']}'
+                        '${friendList[index]['Type']}'
                     ),
                   ],
               ),
@@ -124,12 +131,12 @@ class _ListViewFirebaseDemoPageState extends State<ListViewFirebaseDemoPage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          loadall();
-          Navigator.push(
+        onPressed: () async {
+          var res = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddFriendPage()),
           );
+          loadall();
         },
       ),
     );
